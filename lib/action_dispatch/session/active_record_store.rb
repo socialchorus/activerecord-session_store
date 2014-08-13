@@ -61,7 +61,7 @@ module ActionDispatch
 
       private
         def get_session(env, sid)
-          ActiveRecord::Base.logger.quietly do
+          # ActiveRecord::Base.logger.quietly do
             unless sid and session = @@session_class.find_by_session_id(sid)
               # If the sid was nil or if there is no pre-existing session under the sid,
               # force the generation of a new sid and associate a new session associated with the new sid
@@ -70,11 +70,11 @@ module ActionDispatch
             end
             env[SESSION_RECORD_KEY] = session
             [sid, session.data]
-          end
+          # end
         end
 
         def set_session(env, sid, session_data, options)
-          ActiveRecord::Base.logger.quietly do
+          # ActiveRecord::Base.logger.quietly do
             record = get_session_model(env, sid)
             record.data = session_data
             return false unless record.save
@@ -85,17 +85,17 @@ module ActionDispatch
                 obj.clear_association_cache if obj.respond_to?(:clear_association_cache)
               end
             end
-          end
+          # end
 
           sid
         end
 
         def destroy_session(env, session_id, options)
           if sid = current_session_id(env)
-            ActiveRecord::Base.logger.quietly do
+            # ActiveRecord::Base.logger.quietly do
               get_session_model(env, sid).destroy
               env[SESSION_RECORD_KEY] = nil
-            end
+            # end
           end
 
           generate_sid unless options[:drop]
